@@ -107,22 +107,22 @@ echo -e "$SPEC"
 
 }
 
-echo -e "#\n# 5 nodes for Edge planet\n#\nresources:" > "edge-5n-spec.yaml"
+echo -e "#\n# 6 nodes for Edge planet\n#\nresources:" > "edge-6n-spec.yaml"
 
-for i in `seq 1 5`
+for i in `seq 1 6`
 do
     vm_name=n$i
     echo "provisioning vm: $vm_name"
-    provision_vm $vm_name >> "edge-5n-spec.yaml"
-    echo "" >> "edge-5n-spec.yaml"
+    provision_vm $vm_name >> "edge-6n-spec.yaml"
+    echo "" >> "edge-6n-spec.yaml"
 done
 
-gcloud deployment-manager deployments create edge-5n-planet --config edge-5n-spec.yaml
+gcloud deployment-manager deployments create edge-6n-planet --config edge-6n-spec.yaml
 
 
 # clean up if things went wrong: 
-#   gcloud compute instances delete n1 n2 n3 n4 n5
-#   gcloud deployment-manager deployments delete edge-5n-planet
+#   gcloud compute instances delete n1 n2 n3 n4 n5 n6
+#   gcloud deployment-manager deployments delete edge-6n-planet
 
 #
 echo -e "\nGenerate and setup edge ssh key\n"
@@ -150,7 +150,7 @@ fork = 50
 EOT
 
 
-for i in `seq 1 5`
+for i in `seq 1 6`
 do
     export N${i}_IP=`gcloud compute instances describe n$i --zone=$ZONE_ID --format json | jq -r '.networkInterfaces[] .accessConfigs[] | select( .name == "external-nat" ) .natIP'`
 
@@ -159,7 +159,7 @@ done
 
 
 
-for i in `seq 1 5`
+for i in `seq 1 6`
 do
     REF_IP=N${i}_IP
     eval NODE_IP=\$$REF_IP
@@ -173,7 +173,7 @@ done
 
 
 echo "[edge]" > ~/ansible/hosts
-for i in `seq 1 5`
+for i in `seq 1 6`
 do
     REF_IP=N${i}_IP
     eval NODE_IP=\$$REF_IP
@@ -182,7 +182,7 @@ n$i ansible_host=$NODE_IP ansible_user=edge ansible_ssh_private_key_file=~/.ssh/
 EOT
 done
 
-for i in `seq 1 5`
+for i in `seq 1 6`
 do
     REF_IP=N${i}_IP
     eval NODE_IP=\$$REF_IP
@@ -202,12 +202,14 @@ IP2="$N2_IP_INT"
 IP3="$N3_IP_INT"
 IP4="$N4_IP_INT"
 IP5="$N5_IP_INT"
+IP6="$N6_IP_INT"
 
 IP1_PUBLIC="$N1_IP"
 IP2_PUBLIC="$N2_IP"
 IP3_PUBLIC="$N3_IP"
 IP4_PUBLIC="$N4_IP"
 IP5_PUBLIC="$N5_IP"
+IP6_PUBLIC="$N6_IP"
 
 HOSTIP="\$(hostname -i)"
 MSIP="\$IP1"
