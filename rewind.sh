@@ -120,17 +120,6 @@ done
 gcloud deployment-manager deployments create edge-5n-planet --config edge-5n-spec.yaml
 
 
-fi
-#-----------------------------------------------------------------------
-
-#-----------------------------------------------------------------------
-#
-# Lab 2 Setup
-#
-#-----------------------------------------------------------------------
-if [ 2 -le "$LABNUMBER" ]; then
-
-
 # clean up if things went wrong: 
 #   gcloud compute instances delete n1 n2 n3 n4 n5
 #   gcloud deployment-manager deployments delete edge-5n-planet
@@ -313,9 +302,9 @@ fi
 # Lab 2 Setup
 #
 #-----------------------------------------------------------------------
-if [ 3 -le "$LABNUMBER" ]; then
+if [ 2 -le "$LABNUMBER" ]; then
 
-echo -e "\nRewind to the Lab 3.\n\n"
+echo -e "\nRewind to the Lab 2.\n\n"
 
 ansible edge -bm yum -a "name=/opt/apigee-install/jdk-8u171-linux-x64.rpm state=present"
 
@@ -368,9 +357,9 @@ fi
 # Lab 3 Setup
 #
 #-----------------------------------------------------------------------
-if [ 4 -le "$LABNUMBER" ]; then
+if [ 3 -le "$LABNUMBER" ]; then
 
-echo -e "\nRewind to the Lab 4.\n\n"
+echo -e "\nRewind to the Lab 3.\n\n"
 
 
 
