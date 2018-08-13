@@ -285,10 +285,12 @@ ansible edge -b -m copy -a "src=$PWD/license.txt dest=/opt/apigee-install/"
 
 # visit: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 # and install: http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.rpm
+# http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm
 
-wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.rpm"
 
-ansible edge -m copy -a "src=jdk-8u171-linux-x64.rpm dest=/opt/apigee-install/jdk-8u171-linux-x64.rpm"
+wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm"
+
+ansible edge -m copy -a "src=jdk-8u181-linux-x64.rpm dest=/opt/apigee-install/jdk-8u181-linux-x64.rpm"
 
 
 fi
