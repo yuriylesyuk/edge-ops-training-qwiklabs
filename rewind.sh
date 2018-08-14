@@ -259,6 +259,45 @@ VHOST_ALIAS=traininglab-prod.apigee.net
 USE_ALL_MPS=y
 EOT
 
+cat <<EOT > dev-portal-response.txt
+IP1="$N1_IP_INT"
+IP6="$N6_IP_INT"
+
+HOSTIP=$(hostname -i)
+
+MP_POD=gateway
+REGION=dc-1
+
+PG_NAME=devportal
+PG_USER=apigee
+PG_PWD=postgres
+PG_HOST=\$IP6
+
+DRUPAL_PG_USER=devportal
+DRUPAL_PG_PASS=devportal
+
+DEFAULT_DB=postgres
+
+DEVPORTAL_ADMIN_FIRSTNAME=Training
+DEVPORTAL_ADMIN_LASTNAME=Lab
+DEVPORTAL_ADMIN_USERNAME=traininglab
+DEVPORTAL_ADMIN_PWD=Apigee123!
+DEVPORTAL_ADMIN_EMAIL=opdk@apigee.com
+
+EDGE_ORG=traininglab
+MGMT_URL=http://\$IP1:8080/v1
+DEVADMIN_USER=opdk@apigee.com
+DEVADMIN_PWD=Apigee123!
+
+PHP_FPM_PORT=8888
+
+SMTPHOST=smtp.gmail.com
+SMTP_PROTOCOL="standard"
+SMTPPORT=25
+SMTPUSER=
+SMTPPASSWORD=
+EOT
+
 
 ansible edge -b -a "yum clean all"
 ansible edge -b -a "sudo yum update -y"
@@ -300,6 +339,8 @@ ansible edge -m copy -a "src=jdk-8u181-linux-x64.rpm dest=/opt/apigee-install/jd
 fi
 #-----------------------------------------------------------------------
 
+
+
 #-----------------------------------------------------------------------
 #
 # Lab 2 Setup
@@ -309,9 +350,32 @@ if [ 2 -le "$LABNUMBER" ]; then
 
 echo -e "\nRewind to the Lab 2.\n\n"
 
+
+
+#
+# Lab 2: Prerequisites
+# 
+ansible edge -b -a "setenforce 0"
+
+
+
 ansible edge -bm yum -a "name=/opt/apigee-install/jdk-8u171-linux-x64.rpm state=present"
 
 ansible edge -a "java -version"
+
+fi
+#-----------------------------------------------------------------------
+
+
+
+#-----------------------------------------------------------------------
+#
+# Lab 3 Setup
+#
+#-----------------------------------------------------------------------
+if [ 3 -le "$LABNUMBER" ]; then
+
+echo -e "\nRewind to the Lab 3.\n\n"
 
 #
 # Define environment variables
@@ -371,6 +435,32 @@ echo -e "\nRewind to the Lab 3.\n\n"
 # 
 ansible n1 -f1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f /opt/apigee-install/edge-response-setup-org.txt | tee /opt/apigee-install/edge-apigee-setup-org-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
+gcloud compute firewall-rules create vhost-9001 --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:9001 --source-ranges=0.0.0.0/0
+
+fi
+#-----------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------
+#
+# Lab 4 Setup
+#
+#-----------------------------------------------------------------------
+if [ 4 -le "$LABNUMBER" ]; then
+
+echo -e "\nRewind to the Lab 4.\n\n"
+
+
+
+#
+# Lab 4: DevPortal
+# 
+ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.txt -p pdb | tee /opt/apigee-install/edge-apigee-devportal-pdb-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+
+ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.txt -p dp | tee /opt/apigee-install/edge-apigee-devportal-dp-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+
+
+gcloud compute firewall-rules create devportal --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8079 --source-ranges=0.0.0.0/0
 
 fi
 #-----------------------------------------------------------------------
