@@ -266,6 +266,7 @@ ansible edge -b -a "sudo yum update -y"
 
 
 ansible edge -b -m yum -a "name=mc state=present"
+ansible edge -b -m yum -a "name=nc state=present"
 ansible edge -b -m yum -a "name=wget state=present"
 
 ansible edge -ba "mkdir -p /opt/apigee-install"
