@@ -318,11 +318,11 @@ ansible edge -a "java -version"
 export REPO_CLIENT_ID=`awk '/User:/{print $2}' $PWD/credentials.txt`
 export REPO_PASSWORD=`awk '/Password:/{print $2}' $PWD/credentials.txt`
 
-ansible edge -a "wget https://software.apigee.com/bootstrap_4.17.09.sh -O /opt/apigee-install/bootstrap_4.17.09.sh"
+ansible edge -a "wget https://software.apigee.com/bootstrap_4.18.01.sh -O /opt/apigee-install/bootstrap_4.18.01.sh"
 
 ansible edge -ba "setenforce 0"
 
-ansible edge -ba "bash /opt/apigee-install/bootstrap_4.17.09.sh apigeeuser=$REPO_CLIENT_ID apigeepassword=$REPO_PASSWORD"
+ansible edge -ba "bash /opt/apigee-install/bootstrap_4.18.01.sh apigeeuser=$REPO_CLIENT_ID apigeepassword=$REPO_PASSWORD"
 
 
 ansible edge -a "/opt/apigee/apigee-service/bin/apigee-service apigee-setup install"
