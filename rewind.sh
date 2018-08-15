@@ -359,7 +359,7 @@ ansible edge -b -a "setenforce 0"
 
 
 
-ansible edge -bm yum -a "name=/opt/apigee-install/jdk-8u171-linux-x64.rpm state=present"
+ansible edge -bm yum -a "name=/opt/apigee-install/jdk-8u181-linux-x64.rpm state=present"
 
 ansible edge -a "java -version"
 
