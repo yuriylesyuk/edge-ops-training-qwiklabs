@@ -196,7 +196,7 @@ ansible edge -m ping
 #
 ## Configure response files
 # gen response on local machine
-cat <<EOT > edge-response.txt
+cat <<EOT > edge-response.cfg
 IP1="$N1_IP_INT"
 IP2="$N2_IP_INT"
 IP3="$N3_IP_INT"
@@ -215,7 +215,7 @@ HOSTIP="\$(hostname -i)"
 MSIP="\$IP1"
 ADMIN_EMAIL="opdk@apigee.com"
 APIGEE_ADMINPW="Apigee123!"
-LICENSE_FILE="/opt/apigee-install/license.txt"
+LICENSE_FILE="/opt/apigee-install/license.cfg"
 USE_LDAP_REMOTE_HOST="n"
 LDAP_TYPE="1"
 APIGEE_LDAPPW="Apigee123!"
@@ -239,7 +239,7 @@ SMTPSSL="n"
 BIND_ON_ALL_INTERFACES="y"
 EOT
 
-cat <<EOT > edge-response-setup-org.txt
+cat <<EOT > edge-response-setup-org.cfg
 IP1="$N1_IP_INT"
 
 MSIP=\$IP1
@@ -259,7 +259,7 @@ VHOST_ALIAS=traininglab-prod.apigee.net
 USE_ALL_MPS=y
 EOT
 
-cat <<EOT > dev-portal-response.txt
+cat <<EOT > dev-portal-response.cfg
 IP1="$N1_IP_INT"
 IP6="$N6_IP_INT"
 
@@ -317,13 +317,15 @@ ansible edge -ba "chown edge:edge /opt/apigee-install"
 #
 
 
-ansible edge -b -m copy -a "src=$PWD/credentials.txt dest=/opt/apigee-install/"
+ansible edge -b -m copy -a "src=$PWD/credentials.cfg dest=/opt/apigee-install/"
 
-ansible edge -b -m copy -a "src=$PWD/edge-response.txt dest=/opt/apigee-install/"
+ansible edge -b -m copy -a "src=$PWD/edge-response.cfg dest=/opt/apigee-install/"
 
-ansible edge -b -m copy -a "src=$PWD/edge-response-setup-org.txt dest=/opt/apigee-install/"
+ansible edge -b -m copy -a "src=$PWD/edge-response-setup-org.cfg dest=/opt/apigee-install/"
 
-ansible edge -b -m copy -a "src=$PWD/license.txt dest=/opt/apigee-install/"
+ansible edge -b -m copy -a "src=$PWD/dev-portal-response.cfg dest=/opt/apigee-install/"
+
+ansible edge -b -m copy -a "src=$PWD/license.cfg dest=/opt/apigee-install/"
 
 
 # visit: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
@@ -395,17 +397,17 @@ ansible edge -a "/opt/apigee/apigee-service/bin/apigee-service apigee-setup inst
 #
 # Lab 2: Install Edge
 #
-ansible n1,n2,n3 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.txt -p ds | tee /opt/apigee-install/edge-apigee-ds-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n1,n2,n3 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.cfg -p ds | tee /opt/apigee-install/edge-apigee-ds-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
-ansible n1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.txt -p ms | tee /opt/apigee-install/edge-apigee-ms-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.cfg -p ms | tee /opt/apigee-install/edge-apigee-ms-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
-ansible n2,n3 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.txt -p rmp | tee /opt/apigee-install/edge-apigee-rmp-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n2,n3 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.cfg -p rmp | tee /opt/apigee-install/edge-apigee-rmp-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
-ansible n4,n5 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.txt -p sax | tee /opt/apigee-install/edge-apigee-sax-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n4,n5 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.cfg -p sax | tee /opt/apigee-install/edge-apigee-sax-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
 ansible n1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-validate install | tee /opt/apigee-install/edge-apigee-validate-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
-ansible n1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-validate setup -f /opt/apigee-install/edge-response.txt | tee /opt/apigee-install/edge-apigee-validate-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-validate setup -f /opt/apigee-install/edge-response.cfg | tee /opt/apigee-install/edge-apigee-validate-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
 #
 # Firewall rules to expose the planet
@@ -431,7 +433,7 @@ echo -e "\nRewind to the Lab 4.\n\n"
 #
 # Lab 3: Provision org and env
 # 
-ansible n1 -f1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f /opt/apigee-install/edge-response-setup-org.txt | tee /opt/apigee-install/edge-apigee-setup-org-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n1 -f1 -m shell -a "/opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f /opt/apigee-install/edge-response-setup-org.cfg | tee /opt/apigee-install/edge-apigee-setup-org-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
 gcloud compute firewall-rules create vhost-9001 --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:9001 --source-ranges=0.0.0.0/0
 
@@ -453,9 +455,9 @@ echo -e "\nRewind to the Lab 5.\n\n"
 #
 # Lab 4: DevPortal
 # 
-ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.txt -p pdb | tee /opt/apigee-install/edge-apigee-devportal-pdb-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.cfg -p pdb | tee /opt/apigee-install/edge-apigee-devportal-pdb-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
-ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.txt -p dp | tee /opt/apigee-install/edge-apigee-devportal-dp-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
+ansible n6 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/dev-portal-response.cfg -p dp | tee /opt/apigee-install/edge-apigee-devportal-dp-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
 
 gcloud compute firewall-rules create devportal --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:8079 --source-ranges=0.0.0.0/0
