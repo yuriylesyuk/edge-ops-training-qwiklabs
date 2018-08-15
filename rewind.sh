@@ -385,8 +385,6 @@ export REPO_PASSWORD=`awk '/Password:/{print $2}' $PWD/credentials.txt`
 
 ansible edge -a "wget https://software.apigee.com/bootstrap_4.18.01.sh -O /opt/apigee-install/bootstrap_4.18.01.sh"
 
-ansible edge -ba "setenforce 0"
-
 ansible edge -ba "bash /opt/apigee-install/bootstrap_4.18.01.sh apigeeuser=$REPO_CLIENT_ID apigeepassword=$REPO_PASSWORD"
 
 
@@ -395,7 +393,7 @@ ansible edge -a "/opt/apigee/apigee-service/bin/apigee-service apigee-setup inst
 
 
 #
-# Lab 1: Install Edge
+# Lab 2: Install Edge
 #
 ansible n1,n2,n3 -f1 -m shell -a "/opt/apigee/apigee-setup/bin/setup.sh -f /opt/apigee-install/edge-response.txt -p ds | tee /opt/apigee-install/edge-apigee-ds-install-`date -u +\"%Y-%m-%dT%H:%M:%SZ\"`.log"
 
@@ -421,12 +419,12 @@ fi
 
 #-----------------------------------------------------------------------
 #
-# Lab 3 Setup
+# Lab 4 Setup
 #
 #-----------------------------------------------------------------------
-if [ 3 -le "$LABNUMBER" ]; then
+if [ 4 -le "$LABNUMBER" ]; then
 
-echo -e "\nRewind to the Lab 3.\n\n"
+echo -e "\nRewind to the Lab 4.\n\n"
 
 
 
@@ -443,12 +441,12 @@ fi
 
 #-----------------------------------------------------------------------
 #
-# Lab 4 Setup
+# Lab 5 Setup
 #
 #-----------------------------------------------------------------------
-if [ 4 -le "$LABNUMBER" ]; then
+if [ 5 -le "$LABNUMBER" ]; then
 
-echo -e "\nRewind to the Lab 4.\n\n"
+echo -e "\nRewind to the Lab 5.\n\n"
 
 
 
