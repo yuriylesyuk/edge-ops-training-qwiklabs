@@ -215,7 +215,7 @@ HOSTIP="\$(hostname -i)"
 MSIP="\$IP1"
 ADMIN_EMAIL="opdk@apigee.com"
 APIGEE_ADMINPW="Apigee123!"
-LICENSE_FILE="/opt/apigee-install/license.cfg"
+LICENSE_FILE="/opt/apigee-install/license.txt"
 USE_LDAP_REMOTE_HOST="n"
 LDAP_TYPE="1"
 APIGEE_LDAPPW="Apigee123!"
@@ -325,7 +325,7 @@ ansible edge -b -m copy -a "src=$PWD/edge-response-setup-org.cfg dest=/opt/apige
 
 ansible edge -b -m copy -a "src=$PWD/dev-portal-response.cfg dest=/opt/apigee-install/"
 
-ansible edge -b -m copy -a "src=$PWD/license.cfg dest=/opt/apigee-install/"
+ansible edge -b -m copy -a "src=$PWD/license.txt dest=/opt/apigee-install/"
 
 
 # visit: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
